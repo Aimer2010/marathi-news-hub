@@ -1,38 +1,271 @@
-.App {
-  text-align: center;
+/* KEEP ALL YOUR EXISTING COLOR VARIABLES */
+:root {
+  --dark-blue: #1B3C53;    
+  --mid-blue: #234C6A;     
+  --light-blue: #456882;   
+  --bg-gray: #E3E3E3;      
+  --white: #ffffff;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-gray);
+  color: #333;
+  height: 100vh;
+  overflow: hidden; 
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.app-container {
+  display: grid;
+  grid-template-rows: 80px 1fr 50px; 
+  height: 100vh;
+  width: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* --- UPDATED HEADER WITH SEARCH --- */
+.app-header {
+  background-color: var(--dark-blue);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Spaced out */
+  padding: 0 40px; /* Added padding */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2rem; 
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* SEARCH BOX STYLE */
+.search-box input {
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  width: 300px;
+  font-size: 0.95rem;
+  outline: none;
+  font-family: inherit;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* --- MAIN LAYOUT --- */
+.main-content {
+  display: grid;
+  grid-template-columns: 250px 1fr 300px; 
+  gap: 20px;
+  padding: 20px;
+  overflow: hidden; 
+  background-color: var(--bg-gray);
+}
+
+/* LEFT COLUMN */
+.sidebar-left {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid var(--mid-blue);
   display: flex;
   flex-direction: column;
+  gap: 15px;
+  height: 100%; 
+  box-sizing: border-box; 
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  color: var(--dark-blue);
+  border-bottom: 3px solid var(--bg-gray);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.cat-btn {
+  background: transparent;
+  border: none;
+  text-align: center; 
+  padding: 12px;
+  font-size: 1.1rem;
+  color: var(--mid-blue);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.cat-btn:hover {
+  background-color: var(--bg-gray);
+  border-color: #ddd;
+}
+
+.cat-btn.active {
+  background-color: var(--mid-blue);
+  color: var(--white);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* MIDDLE COLUMN */
+.news-feed {
+  overflow-y: auto; 
+  padding-right: 10px; 
+  scrollbar-width: thin;
+}
+
+/* RIGHT COLUMN */
+.sidebar-right {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid var(--mid-blue);
+  height: 100%; 
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* EXPORT BUTTON STYLE */
+.export-btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.export-btn:hover {
+  background-color: #219150;
+}
+
+.saved-note-item {
+  background-color: #f0f4f8;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border-left: 5px solid var(--light-blue);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.note-date {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 600;
+}
+
+.note-text {
+  font-size: 0.95rem;
+  margin: 0;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* --- FOOTER --- */
+.app-footer {
+  background-color: var(--dark-blue);
+  color: var(--white);
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+/* --- NEWSCARD STYLES (Inline replacements) --- */
+/* We keep the NewsCard container style consistent */
+.news-card-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 15px;
+  margin-bottom: 20px;
+  border-top: 4px solid var(--mid-blue);
+}
+
+.nc-header h3 {
+  margin: 10px 0;
+  font-size: 1.1rem;
+  color: var(--dark-blue);
+}
+
+.nc-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.nc-desc {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.nc-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.nc-link {
+  color: var(--light-blue);
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+/* SHARE BUTTON STYLE */
+.share-btn {
+  background-color: transparent;
+  border: 1px solid #25D366;
+  color: #25D366;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.share-btn:hover {
+  background-color: #25D366;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.nc-note-area {
+  display: flex;
+  gap: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.nc-note-area input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+}
+
+.nc-note-area button {
+  background-color: var(--mid-blue);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.nc-note-area button:hover {
+  background-color: var(--dark-blue);
 }

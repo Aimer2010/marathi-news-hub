@@ -1,0 +1,61 @@
+.news-card-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 15px;
+  margin-bottom: 20px; /* Space between cards */
+  border-top: 4px solid var(--mid-blue);
+}
+
+.nc-header h3 {
+  margin: 10px 0;
+  font-size: 1.1rem;
+  color: var(--dark-blue);
+}
+
+.nc-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.nc-desc {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.nc-link {
+  color: var(--light-blue);
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.nc-note-area {
+  display: flex;
+  margin-top: 15px;
+  gap: 5px;
+}
+
+.nc-note-area input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+}
+
+.nc-note-area button {
+  background-color: var(--mid-blue);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.nc-note-area button:hover {
+  background-color: var(--dark-blue);
+}
