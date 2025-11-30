@@ -126,6 +126,7 @@ function App() {
             <NewsCard 
               key={index} 
               article={item} 
+              category={activeCategory} // <--- ADD THIS NEW PROP
               onSaveNote={addNote} 
             />
           ))}
