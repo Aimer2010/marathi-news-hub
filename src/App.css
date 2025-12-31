@@ -55,6 +55,35 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
+/* --- NEW: AUTH BUTTON STYLES --- */
+.login-btn {
+  background-color: #ff4d4d; /* Red Button */
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #cc0000;
+}
+
+.logout-btn {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
 /* --- MAIN LAYOUT --- */
 .main-content {
   display: grid;
@@ -183,8 +212,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* --- NEWSCARD STYLES (Inline replacements) --- */
-/* We keep the NewsCard container style consistent */
+/* --- NEWSCARD STYLES --- */
 .news-card-container {
   background: white;
   border-radius: 8px;
@@ -227,7 +255,6 @@ body {
   font-size: 0.85rem;
 }
 
-/* SHARE BUTTON STYLE */
 .share-btn {
   background-color: transparent;
   border: 1px solid #25D366;

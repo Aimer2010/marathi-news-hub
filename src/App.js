@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import NewsCard from './NewsCard';
+import { auth } from './firebase'; // Import Firebase
+import { onAuthStateChanged, signOut } from 'firebase/auth'; // Import Auth functions
+import AuthModal from './AuthModal'; // Import the Popup
 
 function App() {
   const categories = {
@@ -12,10 +15,14 @@ function App() {
   };
 
   const [activeCategory, setActiveCategory] = useState("Top Stories");
-  const [searchTerm, setSearchTerm] = useState(""); // State for Search
+  const [searchTerm, setSearchTerm] = useState(""); 
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   
+  // --- AUTH STATES ---
+  const [user, setUser] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
   // Load notes from local storage
   const [savedNotes, setSavedNotes] = useState(() => {
     const saved = localStorage.getItem("newsKattaNotes");
@@ -26,13 +33,24 @@ function App() {
     localStorage.setItem("newsKattaNotes", JSON.stringify(savedNotes));
   }, [savedNotes]);
 
-  // FETCH NEWS (Handles Categories OR Search)
+  // --- LISTEN FOR LOGIN/LOGOUT ---
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe(); 
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
+
+  // FETCH NEWS
   useEffect(() => {
     setLoading(true);
     let rssUrl = "";
 
     if (activeCategory === "Search") {
-      // If in search mode, use the user's term + date filter
       rssUrl = `https://news.google.com/rss/search?q=${searchTerm}+Marathi+when:1d&hl=mr&gl=IN&ceid=IN:mr`;
     } else {
       rssUrl = categories[activeCategory];
@@ -47,7 +65,7 @@ function App() {
         setLoading(false);
       })
       .catch(err => setLoading(false));
-  }, [activeCategory, searchTerm]); // Re-run when category or search changes
+  }, [activeCategory, searchTerm]); 
 
   // ADD NOTE
   const addNote = (text, headline) => {
@@ -66,11 +84,10 @@ function App() {
     setSavedNotes(savedNotes.filter((_, index) => index !== indexToDelete));
   };
 
-  // FEATURE: EXPORT NOTES TO TXT
+  // EXPORT NOTES
   const downloadNotes = () => {
     if(savedNotes.length === 0) return alert("No notes to export!");
     
-    // Format the text nicely
     const fileContent = savedNotes.map(n => 
       `Date: ${n.date}\nTopic: ${n.headline}\nNote: ${n.text}\n-------------------\n`
     ).join("");
@@ -83,10 +100,9 @@ function App() {
     element.click();
   };
 
-  // FEATURE: HANDLE SEARCH SUBMIT
   const handleSearchSubmit = (e) => {
     if (e.key === 'Enter') {
-      setActiveCategory("Search"); // Triggers the useEffect
+      setActiveCategory("Search"); 
     }
   };
 
@@ -95,7 +111,7 @@ function App() {
       <header className="app-header">
         <h1>NewsKatta</h1>
         
-        {/* FEATURE: SEARCH BAR */}
+        {/* SEARCH BAR */}
         <div className="search-box">
           <input 
             type="text" 
@@ -103,6 +119,20 @@ function App() {
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleSearchSubmit}
           />
+        </div>
+
+        {/* --- AUTH BUTTONS (New Addition) --- */}
+        <div className="auth-buttons">
+          {user ? (
+            <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+              <span style={{fontSize: '0.8rem', color: '#ccc'}}>Hi, {user.email.split('@')[0]}</span>
+              <button onClick={handleLogout} className="logout-btn">Logout</button>
+            </div>
+          ) : (
+            <button onClick={() => setShowAuthModal(true)} className="login-btn">
+              Login / Signup
+            </button>
+          )}
         </div>
       </header>
 
@@ -126,40 +156,53 @@ function App() {
             <NewsCard 
               key={index} 
               article={item} 
-              category={activeCategory} // <--- ADD THIS NEW PROP
+              category={activeCategory} 
               onSaveNote={addNote} 
             />
           ))}
         </main>
 
         <aside className="sidebar-right">
-          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'10px'}}>
-            <h3 className="sidebar-title" style={{marginBottom:0, border:0}}>My Notes</h3>
-            {/* FEATURE: DOWNLOAD BUTTON */}
-            <button onClick={downloadNotes} className="export-btn">⬇ Export</button>
-          </div>
-          <hr style={{marginBottom:'15px', border:'0', borderTop:'2px solid #ddd'}} />
-
-          {savedNotes.length === 0 && <p style={{color:'#666', fontSize:'0.9rem', textAlign:'center'}}>No notes saved yet.</p>}
-          
-          {savedNotes.map((note, idx) => (
-            <div key={idx} className="saved-note-item">
-              <div style={{display:'flex', justifyContent:'space-between'}}>
-                <span className="note-date">{note.date}</span>
-                <span onClick={() => deleteNote(idx)} style={{cursor:'pointer', color:'red'}}>×</span>
+          {/* CONDITION: If User is Logged In, Show Notes. If not, Show Lock Message */}
+          {user ? (
+            <>
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'10px'}}>
+                <h3 className="sidebar-title" style={{marginBottom:0, border:0}}>My Notes</h3>
+                <button onClick={downloadNotes} className="export-btn">⬇ Export</button>
               </div>
-              <p className="note-text" style={{fontWeight:'bold', marginBottom:'5px'}}>
-                {note.headline.substring(0, 30)}...
-              </p>
-              <p className="note-text">{note.text}</p>
+              <hr style={{marginBottom:'15px', border:'0', borderTop:'2px solid #ddd'}} />
+
+              {savedNotes.length === 0 && <p style={{color:'#666', fontSize:'0.9rem', textAlign:'center'}}>No notes saved yet.</p>}
+              
+              {savedNotes.map((note, idx) => (
+                <div key={idx} className="saved-note-item">
+                  <div style={{display:'flex', justifyContent:'space-between'}}>
+                    <span className="note-date">{note.date}</span>
+                    <span onClick={() => deleteNote(idx)} style={{cursor:'pointer', color:'red', fontWeight:'bold', padding:'0 5px'}}>×</span>
+                  </div>
+                  <p className="note-text" style={{fontWeight:'bold', marginBottom:'5px'}}>
+                    {note.headline.substring(0, 30)}...
+                  </p>
+                  <p className="note-text">{note.text}</p>
+                </div>
+              ))}
+            </>
+          ) : (
+            // WHAT TO SHOW IF LOGGED OUT
+            <div style={{textAlign:'center', padding:'20px', color:'#666'}}>
+              <h3 className="sidebar-title" style={{border:0}}>My Notes 🔒</h3>
+              <p style={{fontSize:'0.9rem'}}>Please <strong>Login</strong> to create and view your personal notes.</p>
             </div>
-          ))}
+          )}
         </aside>
       </div>
 
       <footer className="app-footer">
         &copy; 2025 NewsKatta - Student News Portal
       </footer>
+
+      {/* --- LOGIN POPUP --- */}
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
     </div>
   );
 }

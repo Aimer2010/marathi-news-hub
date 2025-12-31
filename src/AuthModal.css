@@ -1,0 +1,83 @@
+/* The dark overlay behind the popup */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* The white box */
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff4d4d; /* NewsKatta Red */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.auth-btn:hover {
+  background-color: #cc0000;
+}
+
+.switch-mode {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+}
+
+.switch-mode span {
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-weight: bold;
+}
+
+.error-msg {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
