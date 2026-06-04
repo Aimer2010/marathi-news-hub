@@ -5,14 +5,17 @@ import { auth } from './firebase'; // Import Firebase
 import { onAuthStateChanged, signOut } from 'firebase/auth'; // Import Auth functions
 import AuthModal from './AuthModal'; // Import the Popup
 
-function App() {
-  const categories = {
+
+const categories = {
     "Top Stories": "https://news.google.com/rss?hl=mr&gl=IN&ceid=IN:mr",
     "Rajkaran": "https://news.google.com/rss/search?q=Rajkaran+Maharashtra+when:1d&hl=mr&gl=IN&ceid=IN:mr",
     "Krida": "https://news.google.com/rss/search?q=Krida+batmya+when:1d&hl=mr&gl=IN&ceid=IN:mr",
     "Arthavishwa": "https://news.google.com/rss/search?q=Share+Market+Marathi+when:1d&hl=mr&gl=IN&ceid=IN:mr",
     "Tantra/Auto": "https://news.google.com/rss/search?q=Tantragyan+Auto+when:2d&hl=mr&gl=IN&ceid=IN:mr"
   };
+
+function App() {
+  
 
   const [activeCategory, setActiveCategory] = useState("Top Stories");
   const [searchTerm, setSearchTerm] = useState(""); 
